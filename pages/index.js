@@ -1,82 +1,197 @@
-import Head from 'next/head'
+import { useEffect, useState, useRef } from "react"
+import Head from "next/head"
+import { StartStopButton } from "../components/buttons"
+import { Navbar } from "../components/navbar"
+import { ShortcutsModal, RulesModal } from "../components/modal"
+import { cloneDeep } from "lodash"
+import Table from "../components/table"
+import { useHotkeys } from "react-hotkeys-hook"
+
+const dimension = 50
+
+const randomBooleanTable = dimension => [...Array(dimension)].map(() => Math.random() >= 0.8)
+const falseTable = dimension => Array(dimension).fill(false)
+
+const createMatrice = (dimension, random = false) => {
+  return Array(dimension)
+    .fill()
+    .map(() => (random ? randomBooleanTable(dimension) : falseTable(dimension)))
+}
+
+const neighboursCoordinates = [
+  [-1, -1],
+  [-1, -0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
+]
+
+const getNeighboursAmount = (array, lineIndex, columnIndex, dimension) => {
+  let counter = 0
+
+  neighboursCoordinates.map(coord => {
+    if (
+      lineIndex > 0 &&
+      lineIndex < dimension - 1 &&
+      columnIndex > 0 &&
+      columnIndex < dimension - 1 &&
+      array[lineIndex + coord[0]][columnIndex + coord[1]]
+    )
+      counter++
+  })
+  return counter
+}
+
+const handleDarkMode = () => {
+  if (localStorage.theme === undefined) {
+    localStorage.theme = "dark"
+  }
+  localStorage.theme === "light" ? (localStorage.theme = "dark") : (localStorage.theme = "light")
+  if (
+    localStorage.theme === "dark" ||
+    (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    document.documentElement.classList.add("dark")
+  } else {
+    document.documentElement.classList.remove("dark")
+  }
+}
 
 export default function Home() {
+  const [array, setArray] = useState(() => createMatrice(dimension))
+  const [counter, setCounter] = useState(0)
+  const [isRunning, setIsRunning] = useState(false)
+  const [isDrawing, setIsDrawing] = useState(false)
+  const [isRulesModalOpen, setIsRulesModalOpen] = useState(false)
+  const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false)
+
+  const isRunningReference = useRef(null)
+  const arrayReference = useRef(null)
+
+  isRunningReference.current = isRunning
+  arrayReference.current = array
+
+  useEffect(() => {
+    if (isRunning) game()
+  }, [isRunning])
+
+  useHotkeys("p", () => {
+    if (isRunningReference.current) setIsRunning(false)
+    else setIsRunning(true)
+  })
+
+  useHotkeys("r", () => {
+    handleRandom()
+  })
+
+  useHotkeys("l", () => {
+    setIsRulesModalOpen(isOpen => !isOpen)
+  })
+
+  useHotkeys("d", () => {
+    handleDarkMode()
+  })
+
+  useHotkeys("a", () => {
+    handleRestart()
+  })
+
+  const game = () => {
+    if (!isRunningReference.current) return 1
+    const newArray = cloneDeep(arrayReference.current)
+
+    array.map((lines, indexOfLine) =>
+      lines.map((square, indexOfColumn) => {
+        const amountOfNeighbours = getNeighboursAmount(
+          arrayReference.current,
+          indexOfLine,
+          indexOfColumn,
+          dimension
+        )
+        if (amountOfNeighbours < 2 || amountOfNeighbours > 3)
+          newArray[indexOfLine][indexOfColumn] = false
+        else if (amountOfNeighbours === 3) newArray[indexOfLine][indexOfColumn] = true
+      })
+    )
+    setArray(newArray)
+    setCounter(counter => counter + 1)
+    setTimeout(() => {
+      game()
+    }, 150)
+  }
+
+  const handleIsRunning = () => {
+    setIsRunning(isrunning => !isrunning)
+  }
+
+  const handleRestart = () => {
+    if (isRunningReference.current) setIsRunning(false)
+    setCounter(0)
+    setArray(createMatrice(dimension))
+  }
+
+  const handleRandom = () => {
+    if (isRunningReference.current) setIsRunning(false)
+    setCounter(0)
+    setArray(createMatrice(dimension, true))
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-lavender dark:bg-dark-green-custom background-opacity-10 font-josephin-sans transition duration-150">
       <Head>
-        <title>Create Next App</title>
+        <title>Game of life</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+      <main className="w-full mt-10 mb-8">
+        <ShortcutsModal
+          isOpen={isShortcutsModalOpen}
+          handleOpen={bool => setIsShortcutsModalOpen(bool)}
+        />
+        <RulesModal isOpen={isRulesModalOpen} handleOpen={bool => setIsRulesModalOpen(bool)} />
+        <ContentHeader>Bienvenue</ContentHeader>
+        <MainContainer>
+          <div className="w-full flex sm-height:block border-2 border-dark-green-custom sm-height:border-lavender rounded-l-xl sm-height:rounded-bl-none sm-height:rounded-t-xl dark:bg-green-custom bg-dark-green-custom">
+            <Navbar
+              isRunning={isRunning}
+              counter={counter}
+              handleRestart={handleRestart}
+              handleRandom={handleRandom}
+              handleDarkMode={handleDarkMode}
+              showShortcuts={() => setIsShortcutsModalOpen(isOpen => !isOpen)}
+              showRules={() => setIsRulesModalOpen(isOpen => !isOpen)}
+            />
+            <Table
+              array={array}
+              setArray={setArray}
+              dimension={dimension}
+              handleDrawingStatus={bool => setIsDrawing(bool)}
+              drawingStatus={isDrawing}
+            />
+          </div>
+          <StartStopButton isRunning={isRunning} handleIsRunning={handleIsRunning} />
+        </MainContainer>
       </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
     </div>
+  )
+}
+
+function MainContainer({ children }) {
+  return (
+    <div className="flex flex-col items-center justify-center w-full text-center">
+      <div className="max-w-2xl sm-height:max-w-3xl mx-auto px-4 sm:px-4 sm-height:px-6 w-full sm-height:bg-dark-green-custom sm-height:rounded-xl space-y-6">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function ContentHeader({ children }) {
+  return (
+    <h1 className="text-center mb-8 text-6xl text-dark-green-custom dark:text-lavender text-opacity-70 font-bold transition duration-150">
+      {children}
+    </h1>
   )
 }
