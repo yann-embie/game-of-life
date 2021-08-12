@@ -4,10 +4,6 @@ module.exports = {
   darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
-      screens: {
-        "sm-height": { raw: "(min-height: 920px)" },
-        "md-height": { raw: "(min-height: 1200px)" },
-      },
       colors: {
         lavender: "#D9DBF1",
         "lavender-gray": "#D0CDD7",
