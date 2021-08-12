@@ -63,7 +63,7 @@ const rules = [
 export function ShortcutsModal(props) {
   return (
     <ModalLayout {...props} title="Shortcuts">
-      <ul className="space-y-2 text-sm text-gray-500 dark:text-lavender">
+      <ul className="space-y-2 text-sm text-gray-500">
         {shortcuts.map(shortcut => (
           <li key={shortcut.key} className="flex items-center space-x-4">
             <div className="rounded-full bg-dark-green-custom bg-opacity-50 w-8 h-8 p-2 flex justify-center items-center">
@@ -81,7 +81,7 @@ export function ShortcutsModal(props) {
 export function RulesModal(props) {
   return (
     <ModalLayout {...props} title="Rules">
-      <ol className="space-y-2 text-sm text-gray-500 dark:text-lavender list-none">
+      <ol className="space-y-2 text-sm text-gray-500 list-none">
         {rules.map(rule => (
           <li key={rule.number} className="flex items-center space-x-4">
             {rule.number}. {rule.description}
