@@ -12,7 +12,7 @@ export default function Table(props) {
 
   return (
     <div
-      className="grid w-full"
+      className="grid w-full min-h-full h-[max-content]"
       style={{ aspectRatio: "1" }}
       style={{ gridTemplateColumns: `repeat(${props.dimension}, 1fr)` }}
       onMouseDown={() => props.handleDrawingStatus(true)}

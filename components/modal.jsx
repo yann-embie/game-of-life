@@ -97,12 +97,10 @@ function ModalLayout({ isOpen, handleOpen, children, title }) {
     <>
       <Modal isOpen={isOpen} onClose={handleOpen}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent style={{ backgroundColor: "#D9DBF1" }}>
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton>
-            <div className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-0 focus:ring-offset-0 transition duration-150 active:scale-110">
-              <XIcon />
-            </div>
+            <XIcon />
           </ModalCloseButton>
           <ModalBody>{children}</ModalBody>
         </ModalContent>
