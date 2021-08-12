@@ -189,7 +189,7 @@ export default function Home() {
               showRules={() => setIsRulesModalOpen(isOpen => !isOpen)}
             />
             {isMatriceLoading ? (
-              <div className="flex justify-center bg-lavender py-52">
+              <div className="flex justify-center bg-lavender py-[18.37rem] lg:py-[14.86rem] lg:w-full dark:bg-dark-green-custom dark:border-b dark:border-r dark:border-l dark:border-lavender">
                 <Spinner size="xl" />
               </div>
             ) : (
