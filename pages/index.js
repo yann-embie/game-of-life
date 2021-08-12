@@ -6,7 +6,7 @@ import { ShortcutsModal, RulesModal } from "../components/modal"
 import { cloneDeep } from "lodash"
 import Table from "../components/table"
 import { useHotkeys } from "react-hotkeys-hook"
-import { TestIcon } from "../components/icons"
+import { SquareEmbie, TriangleEmbie, CircleEmbie, HexagonEmbie } from "../components/icons"
 
 const dimension = 50
 
@@ -68,6 +68,7 @@ export default function Home() {
   const [isDrawing, setIsDrawing] = useState(false)
   const [isRulesModalOpen, setIsRulesModalOpen] = useState(false)
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   const isRunningReference = useRef(null)
   const arrayReference = useRef(null)
@@ -80,8 +81,7 @@ export default function Home() {
   }, [isRunning])
 
   useHotkeys("p", () => {
-    if (isRunningReference.current) setIsRunning(false)
-    else setIsRunning(true)
+    handleIsRunning()
   })
 
   useHotkeys("r", () => {
@@ -129,7 +129,12 @@ export default function Home() {
   }
 
   const handleIsRunning = () => {
-    setIsRunning(isrunning => !isrunning)
+    setIsAnimating(isanimating => !isanimating)
+    if (isRunningReference.current) {
+      return setIsRunning(false)
+    } else {
+      return setIsRunning(true)
+    }
   }
 
   const handleRestart = () => {
@@ -150,8 +155,8 @@ export default function Home() {
         <title>Game of life</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <Animations /> */}
-      <main className="w-full h-screen py-10 z-10">
+      {isAnimating && <Animations />}
+      <main className="w-full h-screen py-10 z-10 relative">
         <ShortcutsModal
           isOpen={isShortcutsModalOpen}
           handleOpen={bool => setIsShortcutsModalOpen(bool)}
@@ -199,11 +204,22 @@ function ContentHeader({ children }) {
 }
 
 function Animations() {
+  // var path = document.getElementById("hexagon_embie_path")
+  // console.log(path)
+  // if (path) {
+  //   var length = path.getTotalLength()
+  //   console.log(length)
+  // }
   return (
-    <div className="absolute h-screen w-screen z-0">
-      <TestIcon classes="absolute" />
-      <TestIcon classes="absolute" />
-      <TestIcon classes="absolute" />
+    <div className="absolute top-0 left-0 h-screen w-screen">
+      <SquareEmbie id="square_2_embie" />
+      <CircleEmbie id="circle_2_embie" />
+      <HexagonEmbie id="hexagon_2_embie" />
+      <TriangleEmbie id="triangle_2_embie" />
+      <SquareEmbie id="square_embie" />
+      <TriangleEmbie id="triangle_embie" />
+      <CircleEmbie id="circle_embie" />
+      <HexagonEmbie id="hexagon_embie" />
     </div>
   )
 }
