@@ -151,7 +151,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* <Animations /> */}
-      <main className="w-full py-10 z-10">
+      <main className="w-full h-screen py-10 z-10">
         <ShortcutsModal
           isOpen={isShortcutsModalOpen}
           handleOpen={bool => setIsShortcutsModalOpen(bool)}
@@ -186,9 +186,7 @@ export default function Home() {
 
 function MainContainer({ children }) {
   return (
-    <div className="flex flex-col items-center justify-center w-full text-center">
-      <div className="max-w-2xl mx-auto px-4 md:px-4 w-full space-y-6">{children}</div>
-    </div>
+    <div className="max-w-2xl mx-auto px-4 md:px-4 w-full space-y-6 text-center">{children}</div>
   )
 }
 
