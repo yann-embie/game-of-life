@@ -141,13 +141,13 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-lavender dark:bg-dark-green-custom background-opacity-10 font-josephin-sans transition duration-150">
+    <div className="min-h-screen bg-lavender dark:bg-dark-green-custom background-opacity-10 font-josephin-sans transition duration-150">
       <Head>
         <title>Game of life</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* <Animations /> */}
-      <main className="w-full mt-10 mb-8 z-10">
+      <main className="w-full py-10 z-10">
         <ShortcutsModal
           isOpen={isShortcutsModalOpen}
           handleOpen={bool => setIsShortcutsModalOpen(bool)}
