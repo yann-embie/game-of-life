@@ -6,6 +6,7 @@ import { ShortcutsModal, RulesModal } from "../components/modal"
 import { cloneDeep } from "lodash"
 import Table from "../components/table"
 import { useHotkeys } from "react-hotkeys-hook"
+import { TestIcon } from "../components/icons"
 
 const dimension = 50
 
@@ -145,7 +146,8 @@ export default function Home() {
         <title>Game of life</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="w-full mt-10 mb-8">
+      {/* <Animations /> */}
+      <main className="w-full mt-10 mb-8 z-10">
         <ShortcutsModal
           isOpen={isShortcutsModalOpen}
           handleOpen={bool => setIsShortcutsModalOpen(bool)}
@@ -153,7 +155,7 @@ export default function Home() {
         <RulesModal isOpen={isRulesModalOpen} handleOpen={bool => setIsRulesModalOpen(bool)} />
         <ContentHeader>Bienvenue</ContentHeader>
         <MainContainer>
-          <div className="w-full flex sm-height:block border-2 border-dark-green-custom sm-height:border-lavender rounded-l-xl sm-height:rounded-bl-none sm-height:rounded-t-xl dark:bg-green-custom bg-dark-green-custom">
+          <div className="w-full flex border-2 border-dark-green-custom rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none dark:bg-green-custom bg-dark-green-custom flex-col lg:flex-row">
             <Navbar
               isRunning={isRunning}
               counter={counter}
@@ -168,7 +170,7 @@ export default function Home() {
               setArray={setArray}
               dimension={dimension}
               handleDrawingStatus={bool => setIsDrawing(bool)}
-              drawingStatus={isDrawing}
+              isDrawing={isDrawing}
             />
           </div>
           <StartStopButton isRunning={isRunning} handleIsRunning={handleIsRunning} />
@@ -181,9 +183,7 @@ export default function Home() {
 function MainContainer({ children }) {
   return (
     <div className="flex flex-col items-center justify-center w-full text-center">
-      <div className="max-w-2xl sm-height:max-w-3xl mx-auto px-4 sm:px-4 sm-height:px-6 w-full sm-height:bg-dark-green-custom sm-height:rounded-xl space-y-6">
-        {children}
-      </div>
+      <div className="max-w-2xl mx-auto px-4 md:px-4 w-full space-y-6">{children}</div>
     </div>
   )
 }
@@ -193,5 +193,15 @@ function ContentHeader({ children }) {
     <h1 className="text-center mb-8 text-6xl text-dark-green-custom dark:text-lavender text-opacity-70 font-bold transition duration-150">
       {children}
     </h1>
+  )
+}
+
+function Animations() {
+  return (
+    <div className="absolute h-screen w-screen z-0">
+      <TestIcon classes="absolute" />
+      <TestIcon classes="absolute" />
+      <TestIcon classes="absolute" />
+    </div>
   )
 }

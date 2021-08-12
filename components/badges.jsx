@@ -1,6 +1,6 @@
 export function BadgeWithColorOnActive({ isActive, children }) {
   return (
-    <div className="w-20 flex justify-center sm-height:justify-start">
+    <div className="w-16 sm:w-20 flex sm:justify-center">
       <span
         className={`inline-flex flex-grow-0 items-center justify-between px-3 py-0.5 rounded-full text-sm font-medium bg-lavender dark:bg-green-custom border dark:border-lavender dark:text-lavender text-green-custom transition duration-150 space-x-1 ${
           children < 100 && "min-w-[3.5rem]"

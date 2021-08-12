@@ -1,7 +1,31 @@
-/* .__react_component_tooltip {
-  background: none !important;
+#path {
+  stroke-dasharray: 1800;
+  stroke-dashoffset: 1800;
+  animation: dash 45s linear forwards;
+  animation-iteration-count: infinite;
+  fill: none !important;
 }
 
-.__react_component_tooltip.place-bottom:before {
-  top: 20px !important;
+@keyframes dash {
+  from {
+    stroke: #000;
+  }
+  to {
+    stroke-dashoffset: 60000;
+    stroke: blue;
+  }
+}
+
+#icon {
+  animation: icon 5s linear;
+  animation-iteration-count: infinite;
+}
+
+/* @keyframes icon {
+  0% {
+    transform: rotate(0deg) translateX(-400px);
+  }
+  100% {
+    transform: rotate(45deg) translateX(1500px);
+  }
 } */

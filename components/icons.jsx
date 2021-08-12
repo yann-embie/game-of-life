@@ -109,3 +109,23 @@ export const RulesIcon = () => {
     </svg>
   )
 }
+
+export const TestIcon = ({ classes }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="543.992px"
+      height="543.992px"
+      viewBox="0 0 543.992 543.992"
+      className={`stroke-current text-blue-400 absolute ${classes}`}
+      id="icon"
+    >
+      <polygon
+        id="path"
+        points="540.945,156.287 431.266,105.362 380.354,0 270.209,40.297 159.452,1.705 110.174,107.841 1.29,160.455
+			42.747,273.767 3.046,387.705 112.726,438.63 163.638,543.992 273.786,503.694 384.539,542.287 433.817,436.154 542.702,383.541
+			501.245,270.229"
+      />
+    </svg>
+  )
+}

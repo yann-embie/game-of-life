@@ -1,9 +1,9 @@
 import { cloneDeep } from "lodash"
 
 export default function Table(props) {
-  const handleMouseOver = (lineIndex, columnIndex, square) => {
-    if (!props.array[lineIndex][columnIndex] && props.drawingStatus) {
-      props.array[lineIndex].splice(columnIndex, 1, !square)
+  const handleMouseOver = (lineIndex, columnIndex) => {
+    if (!props.array[lineIndex][columnIndex] && props.isDrawing) {
+      props.array[lineIndex].splice(columnIndex, 1, true)
       props.setArray(oldArr => {
         return cloneDeep(oldArr)
       })
@@ -12,7 +12,7 @@ export default function Table(props) {
 
   return (
     <div
-      className="sm-height:pl-1 sm-height:pr-0.5 sm-height:pb-1 grid w-full"
+      className="grid w-full"
       style={{ gridTemplateColumns: `repeat(${props.dimension}, 1fr)` }}
       onMouseDown={() => props.handleDrawingStatus(true)}
       onMouseUp={() => props.handleDrawingStatus(false)}
@@ -31,8 +31,8 @@ export default function Table(props) {
                 return cloneDeep(oldArr)
               })
             }}
-            onMouseMove={() => {
-              handleMouseOver(lineIndex, columnIndex, square)
+            onMouseEnter={() => {
+              handleMouseOver(lineIndex, columnIndex)
             }}
           />
         ))

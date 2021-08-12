@@ -41,7 +41,7 @@ export function CircularButton({ children, handleClick, dataId, tooltipContent }
   )
 }
 
-export function SquarredButton({ children, handleClick, dataId }) {
+export function SquarredButton({ children, handleClick, dataId, tooltipContent }) {
   return (
     <>
       <button
@@ -61,7 +61,7 @@ export function SquarredButton({ children, handleClick, dataId }) {
         textColor="rgba(11, 57, 72)"
         arrowColor="rgba(165, 180, 252)"
       >
-        Danger zone, carefull
+        {tooltipContent}
       </ReactTooltip>
     </>
   )

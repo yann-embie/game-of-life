@@ -12,8 +12,8 @@ export function Navbar({
   showRules,
 }) {
   return (
-    <div className="sm-height:w-full flex flex-col justify-between items-center sm-height:flex-row bg-transparent py-3 px-4 border-lavender">
-      <div className="flex-1 sm-height:my-auto space-y-4 sm-height:space-y-0">
+    <div className="flex lg:flex-col justify-between items-center bg-transparent py-3 px-4 border-lavender">
+      <div className="flex-1 space-y-1 lg:space-y-4 space-x-1 sm:space-x-4 lg:space-x-0 flex lg:block">
         <BadgeWithColorOnActive isActive={isRunning}>{counter}</BadgeWithColorOnActive>
         <CircularButton handleClick={showShortcuts} dataId="shortcuts" tooltipContent="Shortcuts">
           <ShortcutsIcon />
@@ -26,12 +26,16 @@ export function Navbar({
           <RulesIcon />
         </CircularButton>
       </div>
-      <div className="flex items-center sm-height:block flex-1">
-        <SquarredButton handleClick={handleDarkMode} dataId="danger">
+      <div className="flex items-center justify-center flex-1 mx-1 lg:my-0">
+        <SquarredButton
+          handleClick={handleDarkMode}
+          dataId="danger"
+          tooltipContent="Danger zone, carefull"
+        >
           <DangerIcon />
         </SquarredButton>
       </div>
-      <div className="space-y-4 sm-height:space-y-0 sm-height:space-x-4 flex flex-col sm-height:flex-row flex-1  justify-end">
+      <div className="lg:space-y-4 space-x-1 sm:space-x-4 lg:space-x-0 flex lg:flex-col flex-1 justify-end">
         <CircularButton handleClick={handleRandom} dataId="random" tooltipContent="Random ('r')">
           <RandomIcon />
         </CircularButton>
