@@ -159,7 +159,7 @@ export default function Home() {
         <RulesModal isOpen={isRulesModalOpen} handleOpen={bool => setIsRulesModalOpen(bool)} />
         <ContentHeader>Bienvenue</ContentHeader>
         <MainContainer>
-          <div className="w-full min-h-full h-[max-content] flex border-2 border-dark-green-custom rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none dark:bg-green-custom bg-dark-green-custom flex-col lg:flex-row">
+          <div className="w-full flex border-2 border-dark-green-custom rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none dark:bg-green-custom bg-dark-green-custom flex-col lg:flex-row">
             <Navbar
               isRunning={isRunning}
               counter={counter}

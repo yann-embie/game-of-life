@@ -24,7 +24,7 @@ export default function Table(props) {
             className={`ring-0 border border-lavender-gray dark:border-opacity-50 ${
               square ? "bg-green-custom dark:bg-yellow-500" : "bg-lavender dark:bg-green-custom"
             }`}
-            style={{ aspectRatio: "1" }}
+            style={{ aspectRatio: "1/1" }}
             key={columnIndex}
             onClick={() => {
               props.array[lineIndex].splice(columnIndex, 1, !square)
