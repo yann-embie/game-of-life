@@ -6,9 +6,10 @@ import { ShortcutsModal, RulesModal } from "../components/modal"
 import { cloneDeep } from "lodash"
 import Table from "../components/table"
 import { useHotkeys } from "react-hotkeys-hook"
-import { SquareEmbie, TriangleEmbie, CircleEmbie, HexagonEmbie } from "../components/icons"
 
-const dimension = 50
+import CustomStepSlider from "../components/slider"
+import { Spinner } from "@chakra-ui/react"
+import { Animations } from "../components/animations"
 
 const randomBooleanTable = dimension => [...Array(dimension)].map(() => Math.random() >= 0.8)
 const falseTable = dimension => Array(dimension).fill(false)
@@ -62,19 +63,31 @@ const handleDarkMode = () => {
 }
 
 export default function Home() {
-  const [array, setArray] = useState(() => createMatrice(dimension))
+  const [matriceDimension, setMatriceDimension] = useState(30)
+  const [array, setArray] = useState(() => createMatrice(matriceDimension))
+  const [timeoutBetweenArrayReRender, setTimeoutBetweenArrayReRender] = useState(150)
   const [counter, setCounter] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [isDrawing, setIsDrawing] = useState(false)
   const [isRulesModalOpen, setIsRulesModalOpen] = useState(false)
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isMatriceLoading, setIsMatriceLoading] = useState(false)
 
   const isRunningReference = useRef(null)
   const arrayReference = useRef(null)
+  const timeoutBetweenArrayReRenderReference = useRef(null)
 
   isRunningReference.current = isRunning
   arrayReference.current = array
+  timeoutBetweenArrayReRenderReference.current = timeoutBetweenArrayReRender
+
+  useEffect(() => {
+    handleRestart()
+    setTimeout(() => {
+      setIsMatriceLoading(false)
+    }, 500)
+  }, [matriceDimension])
 
   useEffect(() => {
     if (isRunning) game()
@@ -114,7 +127,7 @@ export default function Home() {
           arrayReference.current,
           indexOfLine,
           indexOfColumn,
-          dimension
+          matriceDimension
         )
         if (amountOfNeighbours < 2 || amountOfNeighbours > 3)
           newArray[indexOfLine][indexOfColumn] = false
@@ -125,7 +138,8 @@ export default function Home() {
     setCounter(counter => counter + 1)
     setTimeout(() => {
       game()
-    }, 150)
+      console.log(timeoutBetweenArrayReRenderReference.current)
+    }, timeoutBetweenArrayReRenderReference.current)
   }
 
   const handleIsRunning = () => {
@@ -140,13 +154,13 @@ export default function Home() {
   const handleRestart = () => {
     if (isRunningReference.current) setIsRunning(false)
     setCounter(0)
-    setArray(createMatrice(dimension))
+    setArray(createMatrice(matriceDimension))
   }
 
   const handleRandom = () => {
     if (isRunningReference.current) setIsRunning(false)
     setCounter(0)
-    setArray(createMatrice(dimension, true))
+    setArray(createMatrice(matriceDimension, true))
   }
 
   return (
@@ -174,14 +188,39 @@ export default function Home() {
               showShortcuts={() => setIsShortcutsModalOpen(isOpen => !isOpen)}
               showRules={() => setIsRulesModalOpen(isOpen => !isOpen)}
             />
-            <Table
-              array={array}
-              setArray={setArray}
-              dimension={dimension}
-              handleDrawingStatus={bool => setIsDrawing(bool)}
-              isDrawing={isDrawing}
-            />
+            {isMatriceLoading ? (
+              <div className="flex justify-center bg-lavender py-52">
+                <Spinner size="xl" />
+              </div>
+            ) : (
+              <Table
+                array={array}
+                setArray={setArray}
+                dimension={matriceDimension}
+                handleDrawingStatus={bool => setIsDrawing(bool)}
+                isDrawing={isDrawing}
+              />
+            )}
           </div>
+          <CustomStepSlider
+            title="Time between render"
+            min={5}
+            max={505}
+            step={20}
+            defaultValue={timeoutBetweenArrayReRender}
+            action={duration => setTimeoutBetweenArrayReRender(duration)}
+          />
+          <CustomStepSlider
+            title="Matrice size"
+            min={20}
+            max={60}
+            step={10}
+            defaultValue={matriceDimension}
+            action={duration => {
+              setIsMatriceLoading(true)
+              setMatriceDimension(duration)
+            }}
+          />
           <StartStopButton isRunning={isRunning} handleIsRunning={handleIsRunning} />
         </MainContainer>
       </main>
@@ -200,26 +239,5 @@ function ContentHeader({ children }) {
     <h1 className="text-center mb-8 text-6xl text-dark-green-custom dark:text-lavender text-opacity-70 font-bold transition duration-150">
       {children}
     </h1>
-  )
-}
-
-function Animations() {
-  // var path = document.getElementById("hexagon_embie_path")
-  // console.log(path)
-  // if (path) {
-  //   var length = path.getTotalLength()
-  //   console.log(length)
-  // }
-  return (
-    <div className="absolute top-0 left-0 h-screen w-screen">
-      <SquareEmbie id="square_2_embie" />
-      <CircleEmbie id="circle_2_embie" />
-      <HexagonEmbie id="hexagon_2_embie" />
-      <TriangleEmbie id="triangle_2_embie" />
-      <SquareEmbie id="square_embie" />
-      <TriangleEmbie id="triangle_embie" />
-      <CircleEmbie id="circle_embie" />
-      <HexagonEmbie id="hexagon_embie" />
-    </div>
   )
 }
