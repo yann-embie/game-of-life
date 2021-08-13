@@ -170,7 +170,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {isAnimating && <Animations />}
-      <main className="w-full h-screen py-10 z-10 relative">
+      <main className="w-full h-full py-10 z-10 relative">
         <ShortcutsModal
           isOpen={isShortcutsModalOpen}
           handleOpen={bool => setIsShortcutsModalOpen(bool)}
