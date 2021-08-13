@@ -7,7 +7,7 @@ import { cloneDeep } from "lodash"
 import Table from "../components/table"
 import { useHotkeys } from "react-hotkeys-hook"
 
-import CustomStepSlider from "../components/slider"
+import { Sliders } from "../components/slider"
 import { Spinner } from "@chakra-ui/react"
 import { Animations } from "../components/animations"
 
@@ -152,6 +152,7 @@ export default function Home() {
   }
 
   const handleRestart = () => {
+    setIsAnimating(false)
     if (isRunningReference.current) setIsRunning(false)
     setCounter(0)
     setArray(createMatrice(matriceDimension))
@@ -202,21 +203,11 @@ export default function Home() {
               />
             )}
           </div>
-          <CustomStepSlider
-            title="Time between render"
-            min={5}
-            max={505}
-            step={20}
-            defaultValue={timeoutBetweenArrayReRender}
-            action={duration => setTimeoutBetweenArrayReRender(duration)}
-          />
-          <CustomStepSlider
-            title="Matrice size"
-            min={20}
-            max={60}
-            step={10}
-            defaultValue={matriceDimension}
-            action={duration => {
+          <Sliders
+            matriceDimension={matriceDimension}
+            timeoutBetweenArrayReRender={timeoutBetweenArrayReRender}
+            handleTimeoutBetweenArrayReRender={duration => setTimeoutBetweenArrayReRender(duration)}
+            handleMatriceDimension={duration => {
               setIsMatriceLoading(true)
               setMatriceDimension(duration)
             }}
