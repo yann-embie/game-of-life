@@ -103,19 +103,6 @@ export default function Home() {
     handleRestart()
   })
 
-  const handleDarkMode = () => {
-    console.log(theme)
-    // if (
-    //   localStorage.theme === "dark" ||
-    //   (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
-    // ) {
-    //   document.documentElement.classList.add("dark")
-    // } else {
-    //   document.documentElement.classList.remove("dark")
-    // }
-    theme === "dark" ? setTheme("light") : setTheme("dark")
-  }
-
   const game = () => {
     if (!isRunningReference.current) return 1
     const newArray = cloneDeep(arrayReference.current)
@@ -182,7 +169,7 @@ export default function Home() {
               counter={counter}
               handleRestart={handleRestart}
               handleRandom={handleRandom}
-              handleDarkMode={handleDarkMode}
+              handleDarkMode={() => (theme === "dark" ? setTheme("light") : setTheme("dark"))}
               showShortcuts={() => setIsShortcutsModalOpen(isOpen => !isOpen)}
               showRules={() => setIsRulesModalOpen(isOpen => !isOpen)}
             />
