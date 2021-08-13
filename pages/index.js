@@ -6,7 +6,7 @@ import { ShortcutsModal, RulesModal } from "../components/modal"
 import { cloneDeep } from "lodash"
 import Table from "../components/table"
 import { useHotkeys } from "react-hotkeys-hook"
-
+import { useTheme } from "next-themes"
 import { Sliders } from "../components/slider"
 import { Spinner } from "@chakra-ui/react"
 import { Animations } from "../components/animations"
@@ -47,21 +47,6 @@ const getNeighboursAmount = (array, lineIndex, columnIndex, dimension) => {
   return counter
 }
 
-const handleDarkMode = () => {
-  if (localStorage.theme === undefined) {
-    localStorage.theme = "dark"
-  }
-  localStorage.theme === "light" ? (localStorage.theme = "dark") : (localStorage.theme = "light")
-  if (
-    localStorage.theme === "dark" ||
-    (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
-  ) {
-    document.documentElement.classList.add("dark")
-  } else {
-    document.documentElement.classList.remove("dark")
-  }
-}
-
 export default function Home() {
   const [matriceDimension, setMatriceDimension] = useState(30)
   const [array, setArray] = useState(() => createMatrice(matriceDimension))
@@ -73,6 +58,7 @@ export default function Home() {
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isMatriceLoading, setIsMatriceLoading] = useState(false)
+  const { theme, setTheme } = useTheme()
 
   const isRunningReference = useRef(null)
   const arrayReference = useRef(null)
@@ -117,10 +103,22 @@ export default function Home() {
     handleRestart()
   })
 
+  const handleDarkMode = () => {
+    console.log(theme)
+    // if (
+    //   localStorage.theme === "dark" ||
+    //   (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    // ) {
+    //   document.documentElement.classList.add("dark")
+    // } else {
+    //   document.documentElement.classList.remove("dark")
+    // }
+    theme === "dark" ? setTheme("light") : setTheme("dark")
+  }
+
   const game = () => {
     if (!isRunningReference.current) return 1
     const newArray = cloneDeep(arrayReference.current)
-
     array.map((lines, indexOfLine) =>
       lines.map((square, indexOfColumn) => {
         const amountOfNeighbours = getNeighboursAmount(
@@ -138,7 +136,6 @@ export default function Home() {
     setCounter(counter => counter + 1)
     setTimeout(() => {
       game()
-      console.log(timeoutBetweenArrayReRenderReference.current)
     }, timeoutBetweenArrayReRenderReference.current)
   }
 
